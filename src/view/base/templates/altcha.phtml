@@ -1,0 +1,42 @@
+<?php
+
+/**
+ * Copyright (c) 2026 SAS WEB COOKING
+ * @author Vincent Enjalbert <chef@web-cooking.net>
+ * @license MIT (see LICENSE)
+ */
+
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Webcooking\Altcha\ViewModel\Widget $viewModel */
+
+$viewModel = $block->getData('view_model');
+$formKey = (string)$block->getData('altcha_for');
+if (!$viewModel instanceof \Webcooking\Altcha\ViewModel\Widget
+    || $formKey === ''
+    || !$viewModel->isEnabledFor($formKey)
+) {
+    return;
+}
+$challenge = $viewModel->getChallengeValue($formKey);
+if ($challenge === '') {
+    return;
+}
+$theme = $viewModel->getTheme($formKey);
+?>
+<div class="field altcha-field">
+    <altcha-widget
+        challenge="<?= $escaper->escapeHtmlAttr($challenge) ?>"
+        name="<?= $escaper->escapeHtmlAttr($viewModel->getFieldName()) ?>"
+        language="<?= $escaper->escapeHtmlAttr($viewModel->getLanguage()) ?>"
+        configuration="<?= $escaper->escapeHtmlAttr($viewModel->getConfigurationJson($formKey)) ?>"
+        <?php if ($theme === 'light' || $theme === 'dark'): ?>
+        theme="<?= $escaper->escapeHtmlAttr($theme) ?>"
+        <?php endif; ?>
+    ></altcha-widget>
+    <noscript>
+        <p class="message error">
+            <?= $escaper->escapeHtml(__('This form is protected by a CAPTCHA that requires JavaScript and a recent browser.')) ?>
+        </p>
+    </noscript>
+</div>

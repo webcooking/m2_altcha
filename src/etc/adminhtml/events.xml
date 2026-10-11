@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright (c) 2026 SAS WEB COOKING
+ * @author Vincent Enjalbert <chef@web-cooking.net>
+ * @license MIT (see LICENSE)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="admin_user_authenticate_before">
+        <observer name="webcooking_altcha_admin_login" instance="Webcooking\Altcha\Observer\AdminLoginObserver"/>
+    </event>
+    <event name="controller_action_predispatch_adminhtml_auth_forgotpassword">
+        <observer name="webcooking_altcha_admin_forgotpassword" instance="Webcooking\Altcha\Observer\Virtual\ValidateAdminForgotPassword"/>
+    </event>
+</config>

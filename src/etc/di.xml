@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright (c) 2026 SAS WEB COOKING
+ * @author Vincent Enjalbert <chef@web-cooking.net>
+ * @license MIT (see LICENSE)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Webcooking\Altcha\Api\ChallengeServiceInterface" type="Webcooking\Altcha\Model\ChallengeService"/>
+    <preference for="Webcooking\Altcha\Api\SolutionVerifierInterface" type="Webcooking\Altcha\Model\SolutionVerifier"/>
+    <preference for="Webcooking\Altcha\Api\Data\VerificationResultInterface" type="Webcooking\Altcha\Model\VerificationResult"/>
+
+    <!-- Single source of truth: form key => system.xml group holding its enable flag -->
+    <type name="Webcooking\Altcha\Model\Config">
+        <arguments>
+            <argument name="forms" xsi:type="array">
+                <item name="customer_login" xsi:type="string">frontend_forms</item>
+                <item name="customer_create" xsi:type="string">frontend_forms</item>
+                <item name="customer_forgotpassword" xsi:type="string">frontend_forms</item>
+                <item name="contact" xsi:type="string">frontend_forms</item>
+                <item name="newsletter" xsi:type="string">frontend_forms</item>
+                <item name="product_review" xsi:type="string">frontend_forms</item>
+                <item name="admin_login" xsi:type="string">backend_forms</item>
+                <item name="admin_forgotpassword" xsi:type="string">backend_forms</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- One virtual type per protected POST action; adding a form = one entry here + one event -->
+    <virtualType name="Webcooking\Altcha\Observer\Virtual\ValidateCustomerLogin" type="Webcooking\Altcha\Observer\ValidateOnPredispatch">
+        <arguments>
+            <argument name="formKey" xsi:type="string">customer_login</argument>
+            <argument name="redirectRoute" xsi:type="string">customer/account/login</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Webcooking\Altcha\Observer\Virtual\ValidateCustomerCreate" type="Webcooking\Altcha\Observer\ValidateOnPredispatch">
+        <arguments>
+            <argument name="formKey" xsi:type="string">customer_create</argument>
+            <argument name="redirectRoute" xsi:type="string">customer/account/create</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Webcooking\Altcha\Observer\Virtual\ValidateCustomerForgotPassword" type="Webcooking\Altcha\Observer\ValidateOnPredispatch">
+        <arguments>
+            <argument name="formKey" xsi:type="string">customer_forgotpassword</argument>
+            <argument name="redirectRoute" xsi:type="string">customer/account/forgotpassword</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Webcooking\Altcha\Observer\Virtual\ValidateContact" type="Webcooking\Altcha\Observer\ValidateOnPredispatch">
+        <arguments>
+            <argument name="formKey" xsi:type="string">contact</argument>
+            <argument name="redirectRoute" xsi:type="string">contact/index/index</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Webcooking\Altcha\Observer\Virtual\ValidateNewsletter" type="Webcooking\Altcha\Observer\ValidateOnPredispatch">
+        <arguments>
+            <argument name="formKey" xsi:type="string">newsletter</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Webcooking\Altcha\Observer\Virtual\ValidateProductReview" type="Webcooking\Altcha\Observer\ValidateOnPredispatch">
+        <arguments>
+            <argument name="formKey" xsi:type="string">product_review</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Webcooking\Altcha\Observer\Virtual\ValidateAdminForgotPassword" type="Webcooking\Altcha\Observer\ValidateOnPredispatch">
+        <arguments>
+            <argument name="formKey" xsi:type="string">admin_forgotpassword</argument>
+            <argument name="redirectRoute" xsi:type="string">adminhtml/auth/forgotpassword</argument>
+            <argument name="requiredParam" xsi:type="string">email</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Webcooking\Altcha\Console\Command\DisableAltchaCommand">
+        <arguments>
+            <argument name="forms" xsi:type="array">
+                <item name="customer_login" xsi:type="string">frontend_forms</item>
+                <item name="customer_create" xsi:type="string">frontend_forms</item>
+                <item name="customer_forgotpassword" xsi:type="string">frontend_forms</item>
+                <item name="contact" xsi:type="string">frontend_forms</item>
+                <item name="newsletter" xsi:type="string">frontend_forms</item>
+                <item name="product_review" xsi:type="string">frontend_forms</item>
+                <item name="admin_login" xsi:type="string">backend_forms</item>
+                <item name="admin_forgotpassword" xsi:type="string">backend_forms</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="altcha_disable" xsi:type="object">Webcooking\Altcha\Console\Command\DisableAltchaCommand</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="altcha/general/secret" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

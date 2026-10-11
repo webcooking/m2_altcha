@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright (c) 2026 SAS WEB COOKING
+ * @author Vincent Enjalbert <chef@web-cooking.net>
+ * @license MIT (see LICENSE)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="controller_action_predispatch_customer_account_loginPost">
+        <observer name="webcooking_altcha_customer_login" instance="Webcooking\Altcha\Observer\Virtual\ValidateCustomerLogin"/>
+    </event>
+    <event name="controller_action_predispatch_customer_account_createpost">
+        <observer name="webcooking_altcha_customer_create" instance="Webcooking\Altcha\Observer\Virtual\ValidateCustomerCreate"/>
+    </event>
+    <event name="controller_action_predispatch_customer_account_forgotpasswordpost">
+        <observer name="webcooking_altcha_customer_forgotpassword" instance="Webcooking\Altcha\Observer\Virtual\ValidateCustomerForgotPassword"/>
+    </event>
+    <event name="controller_action_predispatch_contact_index_post">
+        <observer name="webcooking_altcha_contact" instance="Webcooking\Altcha\Observer\Virtual\ValidateContact"/>
+    </event>
+    <event name="controller_action_predispatch_newsletter_subscriber_new">
+        <observer name="webcooking_altcha_newsletter" instance="Webcooking\Altcha\Observer\Virtual\ValidateNewsletter"/>
+    </event>
+    <event name="controller_action_predispatch_review_product_post">
+        <observer name="webcooking_altcha_product_review" instance="Webcooking\Altcha\Observer\Virtual\ValidateProductReview"/>
+    </event>
+</config>

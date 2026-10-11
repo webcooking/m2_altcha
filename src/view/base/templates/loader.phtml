@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * Copyright (c) 2026 SAS WEB COOKING
+ * @author Vincent Enjalbert <chef@web-cooking.net>
+ * @license MIT (see LICENSE)
+ */
+
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Magento\Framework\Escaper $escaper */
+
+// Duplicate tags on a page are harmless: the browser deduplicates the
+// stylesheet request and executes the module script once.
+?>
+<link rel="stylesheet" type="text/css" media="all"
+      href="<?= $escaper->escapeUrl($block->getViewFileUrl('Webcooking_Altcha::css/altcha.css')) ?>"/>
+<script type="module" async
+        src="<?= $escaper->escapeUrl($block->getViewFileUrl('Webcooking_Altcha::js/altcha-loader.min.js')) ?>"></script>

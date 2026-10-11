@@ -1,0 +1,65 @@
+<?php
+
+/**
+ * Copyright (c) 2026 SAS WEB COOKING
+ * @author Vincent Enjalbert <chef@web-cooking.net>
+ * @license MIT (see LICENSE)
+ *
+ * Copy of Magento_Newsletter::subscribe.phtml with the ALTCHA widget rendered
+ * inside the form (see view/frontend/layout/default.xml).
+ */
+
+/** @var \Magento\Newsletter\Block\Subscribe $block */
+/** @var \Magento\Framework\View\Element\ButtonLockManager|null $buttonLockManager */
+$buttonLockManager = $block->getData('button_lock_manager');
+/** @var \Magento\Framework\Escaper $escaper */
+?>
+<div class="block newsletter">
+    <div class="title"><strong><?= $escaper->escapeHtml(__('Newsletter')) ?></strong></div>
+    <div class="content">
+        <form class="form subscribe"
+            novalidate
+            action="<?= $escaper->escapeUrl($block->getFormActionUrl()) ?>"
+            method="post"
+            data-mage-init='{"validation": {"errorClass": "mage-error"}}'
+            id="newsletter-validate-detail">
+            <div class="field newsletter">
+                <div class="control">
+                    <label for="newsletter">
+                        <span class="label">
+                            <?= $escaper->escapeHtml(__('Sign Up for Our Newsletter:')) ?>
+                        </span>
+                        <input name="email" type="email" id="newsletter"
+                               placeholder="<?= $escaper->escapeHtml(__('Enter your email address')) ?>"
+                               data-mage-init='{"mage/trim-input":{}}'
+                               data-validate="{required:true, 'validate-email':true}"
+                        />
+                    </label>
+                </div>
+            </div>
+            <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
+            <?= $block->getChildHtml('altcha') ?>
+            <div class="actions">
+                <button class="action subscribe primary"
+                        title="<?= $escaper->escapeHtmlAttr(__('Subscribe')) ?>"
+                        type="submit"
+                        aria-label="Subscribe"
+                    <?php if ($buttonLockManager?->isDisabled('newsletter_form_submit')): ?>
+                        disabled="disabled"
+                    <?php endif; ?>>
+                    <span><?= $escaper->escapeHtml(__('Subscribe')) ?></span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<?= $block->getChildHtml('altcha_assets') ?>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Customer/js/block-submit-on-send": {
+                "formId": "newsletter-validate-detail"
+            }
+        }
+    }
+</script>

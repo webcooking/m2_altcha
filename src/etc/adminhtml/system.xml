@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright (c) 2026 SAS WEB COOKING
+ * @author Vincent Enjalbert <chef@web-cooking.net>
+ * @license MIT (see LICENSE)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="altcha" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>ALTCHA</label>
+            <tab>security</tab>
+            <resource>Webcooking_Altcha::config_altcha</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General</label>
+                <field id="enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable ALTCHA</label>
+                    <comment>Master switch. Each protected form must also be enabled below.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="recaptcha_conflict" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label/>
+                    <frontend_model>Webcooking\Altcha\Block\Adminhtml\System\Config\RecaptchaConflictNotice</frontend_model>
+                </field>
+                <field id="secret" translate="label comment" type="obscure" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>HMAC Secret</label>
+                    <comment>Auto-generated on install. Clear the field and save to rotate the key (in-flight challenges will fail and be re-solved).</comment>
+                    <backend_model>Webcooking\Altcha\Model\Config\Backend\Secret</backend_model>
+                </field>
+                <field id="difficulty" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Proof-of-Work Difficulty</label>
+                    <comment>Higher difficulty means more computation in the visitor's browser. "Hard" can take several seconds on low-end mobile devices.</comment>
+                    <source_model>Webcooking\Altcha\Model\Config\Source\Difficulty</source_model>
+                </field>
+                <field id="expiry" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Challenge Expiry (seconds)</label>
+                    <comment>Between 60 and 3600. A solved challenge must be submitted before it expires.</comment>
+                    <validate>required-entry validate-digits digits-range-60-3600</validate>
+                </field>
+            </group>
+            <group id="appearance" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Appearance</label>
+                <field id="hidefooter" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Hide ALTCHA Footer Link</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="hidelogo" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Hide ALTCHA Logo</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="theme" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Theme</label>
+                    <source_model>Webcooking\Altcha\Model\Config\Source\Theme</source_model>
+                </field>
+            </group>
+            <group id="frontend_forms" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Storefront Forms</label>
+                <comment>If Google reCAPTCHA is still enabled for a form (Security &gt; Google reCAPTCHA Storefront), disable it there before enabling ALTCHA for the same form.</comment>
+                <field id="customer_login" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Customer Login</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="customer_create" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Customer Registration</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="customer_forgotpassword" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Customer Forgot Password</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="contact" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Contact Form</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="newsletter" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Newsletter Subscription</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="product_review" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Product Review</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+            <group id="backend_forms" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Admin Forms</label>
+                <comment>Emergency disable from CLI: bin/magento altcha:disable admin_login</comment>
+                <field id="admin_login" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Admin Login</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="admin_forgotpassword" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Admin Forgot Password</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

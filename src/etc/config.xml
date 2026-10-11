@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright (c) 2026 SAS WEB COOKING
+ * @author Vincent Enjalbert <chef@web-cooking.net>
+ * @license MIT (see LICENSE)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <altcha>
+            <general>
+                <enabled>0</enabled>
+                <secret backend_model="Webcooking\Altcha\Model\Config\Backend\Secret"/>
+                <difficulty>balanced</difficulty>
+                <expiry>600</expiry>
+            </general>
+            <appearance>
+                <hidefooter>0</hidefooter>
+                <hidelogo>0</hidelogo>
+                <theme>auto</theme>
+            </appearance>
+            <frontend_forms>
+                <customer_login>0</customer_login>
+                <customer_create>0</customer_create>
+                <customer_forgotpassword>0</customer_forgotpassword>
+                <contact>0</contact>
+                <newsletter>0</newsletter>
+                <product_review>0</product_review>
+            </frontend_forms>
+            <backend_forms>
+                <admin_login>0</admin_login>
+                <admin_forgotpassword>0</admin_forgotpassword>
+            </backend_forms>
+        </altcha>
+    </default>
+</config>

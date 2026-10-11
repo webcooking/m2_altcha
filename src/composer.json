@@ -1,0 +1,50 @@
+{
+    "name": "webcooking/altcha",
+    "description": "Self-hosted, privacy-friendly ALTCHA proof-of-work CAPTCHA for Magento 2 (Luma storefront and admin). A GDPR-friendly alternative to Google reCAPTCHA: no third-party calls, no cookies, no tracking.",
+    "type": "magento2-module",
+    "version": "1.0.0",
+    "license": "MIT",
+    "keywords": [
+        "magento2",
+        "captcha",
+        "altcha",
+        "proof-of-work",
+        "recaptcha",
+        "gdpr",
+        "security",
+        "spam"
+    ],
+    "authors": [
+        {
+            "name": "Vincent Enjalbert",
+            "email": "chef@web-cooking.net",
+            "homepage": "https://www.web-cooking.net/",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=8.3",
+        "altcha-org/altcha": "2.0.3",
+        "magento/framework": "^103.0",
+        "magento/module-backend": "^102.0",
+        "magento/module-config": "^101.2",
+        "magento/module-contact": "^100.4",
+        "magento/module-customer": "^103.0",
+        "magento/module-newsletter": "^100.4",
+        "magento/module-review": "^100.4",
+        "magento/module-store": "^101.1",
+        "magento/module-user": "^101.2"
+    },
+    "require-dev": {
+        "magento/magento-coding-standard": "*",
+        "phpunit/phpunit": "^10.5 || ^11.0 || ^12.0"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Webcooking\\Altcha\\": ""
+        }
+    }
+}
