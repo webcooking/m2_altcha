@@ -3,8 +3,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 Self-hosted, privacy-friendly **[ALTCHA](https://altcha.org/)** proof-of-work
-CAPTCHA for Magento 2 — a GDPR-friendly alternative to Google reCAPTCHA (the
-only option Magento ships with). No third-party calls, no cookies, no tracking:
+CAPTCHA for Magento 2 — a GDPR-friendly alternative to Google reCAPTCHA. No
+third-party calls, no cookies, no tracking:
 the visitor's browser solves a small cryptographic puzzle in a Web Worker, and
 your server verifies it.
 
@@ -22,18 +22,23 @@ your server verifies it.
 Adding another form is one DI virtual type + one event entry + one system.xml
 field + one layout file — see `etc/di.xml` and `etc/frontend/events.xml`.
 
-**Not covered yet** (roadmap): Hyvä theme compatibility (planned first — the
-widget is a framework-agnostic Web Component, only layout wiring is needed),
-Luma AJAX login popup, checkout/PayPal/wishlist/send-friend, REST/GraphQL,
-ALTCHA Sentinel.
+The supplied layouts target the Luma storefront and Magento's native admin
+theme. They do not wire the widget into Hyvä, the Luma AJAX login popup,
+checkout/PayPal/wishlist/send-friend flows, or REST/GraphQL APIs. ALTCHA
+Sentinel integration is not included.
 
-## Requirements & support matrix
+## Requirements
 
-- PHP **8.3 / 8.4** (8.5 will be added together with a Magento line that supports it)
-- Magento Open Source / Adobe Commerce **2.4.8 / 2.4.9**. Other 2.4.x lines are
-  not announced as supported: composer constraints technically allow them, but
-  support is only declared once the integration suite has been run against a
-  given line (2.4.7 candidate, validation pending)
+- PHP `>=8.3`
+- Magento packages: `magento/framework ^103.0`, `magento/module-backend ^102.0`,
+  `magento/module-config ^101.2`, `magento/module-contact ^100.4`,
+  `magento/module-customer ^103.0`, `magento/module-newsletter ^100.4`,
+  `magento/module-review ^100.4`, `magento/module-store ^101.1`, and
+  `magento/module-user ^101.2`
+- The module loads after `Magento_Backend`, `Magento_Config`, `Magento_Contact`,
+  `Magento_Customer`, `Magento_Newsletter`, `Magento_Review`, `Magento_Store`,
+  and `Magento_User`.
+- `altcha-org/altcha` **2.0.3**
 - **HTTPS storefront and admin** — the widget requires a secure context (Web Crypto)
 - Evergreen browsers (Web Components + Web Crypto). Visitors without JavaScript
   or with legacy browsers see an explanatory message and cannot submit protected
@@ -57,9 +62,11 @@ An HMAC secret is generated automatically (encrypted) during `setup:upgrade`.
 
 **Stores → Configuration → Security → ALTCHA**
 
-- **General**: master switch, HMAC secret (clear + save to rotate), proof-of-work
-  difficulty (easy / balanced / hard), challenge expiry (60–3600 s, default 600).
-- **Appearance**: hide ALTCHA footer link / logo, theme (auto / light / dark).
+- **General**: master switch (off by default), HMAC secret (generated during
+  installation; clear + save to rotate), proof-of-work difficulty (easy /
+  balanced / hard; default balanced), challenge expiry (60–3600 s; default 600).
+- **Appearance**: hide ALTCHA footer link (off by default), hide its logo (off
+  by default), and choose the theme (auto / light / dark; default auto).
 - **Storefront Forms / Admin Forms**: one toggle per form. Everything is **off
   by default** — nothing is blocked until you opt in.
 
@@ -79,8 +86,6 @@ otherwise visitors face two CAPTCHAs or blocked submissions):
 | product_review | Storefront → Product Review |
 | admin_login | Admin Panel → Login |
 | admin_forgotpassword | Admin Panel → Forgot Password |
-
-(Paths verified identical on Magento 2.4.8 and 2.4.9.)
 
 The same applies to Magento's **built-in CAPTCHA** (Stores → Configuration →
 Customers → CAPTCHA, storefront and admin): disable it for forms you protect
@@ -168,6 +173,20 @@ If you run hardened custom policies, keep `'self'` allowed for `script-src`,
   sitting inside the newsletter `<form>`); and the secret lifecycle (stored
   encrypted in `core_config_data`, read decrypted through the config metadata
   processor).
+
+## Developer extension points
+
+- `Webcooking\Altcha\Api\ChallengeServiceInterface` mints challenges for a form
+  and store; `Webcooking\Altcha\Api\SolutionVerifierInterface` verifies widget
+  payloads; `Webcooking\Altcha\Api\Data\VerificationResultInterface` exposes
+  the result and stable error codes. Each has a preference in `etc/di.xml`.
+- The `forms` argument of `Webcooking\Altcha\Model\Config` maps form keys to
+  their configuration groups. Standard POST actions use configurable
+  `ValidateOnPredispatch` virtual types with `formKey`, optional
+  `redirectRoute`, and optional `requiredParam` arguments.
+- Adding a protected form also requires its enable field, event observer, and
+  layout injection so the widget and server-side validator use the same form
+  key.
 
 ## Vendored widget
 
